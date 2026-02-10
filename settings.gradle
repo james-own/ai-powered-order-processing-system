@@ -1,0 +1,5 @@
+rootProject.name = 'ai-powered-order-processing-system'
+
+include 'order-service'
+include 'inventory-service'
+include 'notification-service'
