@@ -1,0 +1,28 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: microservices
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: order-service
+          __path__: /var/log/order-service/*.log
+      - targets:
+          - localhost
+        labels:
+          job: inventory-service
+          __path__: /var/log/inventory-service/*.log
+      - targets:
+          - localhost
+        labels:
+          job: notification-service
+          __path__: /var/log/notification-service/*.log
