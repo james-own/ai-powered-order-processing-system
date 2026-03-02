@@ -1,6 +1,59 @@
 spring:
   application:
-    name: order-service 
+    name: order-service
+
+  # JPA/Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  # Local PostgreSQL Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order-db
+    username: postgres
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
 
 server:
   port: 8081
+
+# Actuator - Expose metrics and health endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    prometheus:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+
+  # Distributed Tracing
+  tracing:
+    sampling:
+      probability: 1.0
+  otlp:
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.jameson.orderservice: DEBUG
+    org.springframework.kafka: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+  file:
+    name: /var/log/order-service/application.log
